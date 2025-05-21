@@ -8,36 +8,37 @@ export const useComments = (postId) => {
   // Obtener los comentarios del post por ID
   useEffect(() => {
     const fetchComments = async () => {
-      setLoading(true);
-      setError(null);  // Resetear errores en cada nueva carga
+        setLoading(true);
+        setError(null); 
 
-      try {
-        const response = await getCommentsByPost(postId);
-        if (response.error) {
-          setError(response.message);
-        } else {
-          setComments(response.data);
+        try {
+            const response = await getCommentsByPost(postId);
+            if (response.error) {
+                setError(response.message);
+            } else {
+                setComments(response.data.comments || []); 
+            }
+        } catch (err) {
+            setError('Error al cargar los comentarios.');
+        } finally {
+            setLoading(false);
         }
-      } catch (err) {
-        setError('Error al cargar los comentarios.');
-      } finally {
-        setLoading(false);
-      }
     };
 
     if (postId) {
-      fetchComments();
+        fetchComments();
     }
-  }, [postId]);
+}, [postId]);
 
   // Función para agregar un comentario
-  const addComment = async (text) => {
+  const addComment = async (content) => {
     try {
-      const response = await createComment({ postId, text });
+      console.log({ postId, ...content }); 
+      const response = await createComment({ post: postId, ...content });
       if (response.error) {
         setError(response.message);
       } else {
-        setComments((prevComments) => [...prevComments, response.data]);  
+        setComments((prevComments) => Array.isArray(prevComments) ? [response.data.comment, ...prevComments] : [response.data.comment]);
       }
     } catch (err) {
       setError('Error al agregar el comentario.');

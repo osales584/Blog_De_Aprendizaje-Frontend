@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
 import { Home } from './pages/Home.jsx';
-import PostDetail from './components/PostDetail';  // Importa el componente de detalle de post
+import PostDetail from './components/PostDetail.jsx'; 
 
 const App = () => (
   <Router>

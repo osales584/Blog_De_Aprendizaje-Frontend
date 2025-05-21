@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'; // Para obtener el id del post
-import { getPosts, getCommentsByPost } from '../services/api'; // Importar las funciones de API
-import Comments from './Comments'; // Componente de comentarios
+import { useParams } from 'react-router-dom'; 
+import { getPosts, getCommentsByPost } from '../services/api'; 
+import Comments from './Comments'; 
 
 const PostDetail = () => {
-  const { id } = useParams(); // Obtener el id del post desde la URL
+  const { id } = useParams(); 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ const PostDetail = () => {
         if (response.error) {
           setError(response.message);
         } else {
-          setPost(response.data[0]); // Si la API devuelve un array, tomamos el primer post
+          setPost(response.data); 
         }
       } catch (err) {
         setError('Error al cargar el post.');
@@ -54,7 +54,11 @@ const PostDetail = () => {
         <>
           <h1 className="text-4xl font-semibold">{post.title}</h1>
           <p className="mt-4">{post.description}</p>
-          <p className="mt-2 text-gray-500">{new Date(post.createdAt).toLocaleDateString()}</p>
+          <p className="mt-2 text-gray-500">
+            {post.createdAt && !isNaN(new Date(post.createdAt))
+              ? new Date(post.createdAt).toLocaleDateString()
+              : ''}
+          </p>
 
           {/* Renderiza los comentarios */}
           <Comments postId={id} comments={comments} />
